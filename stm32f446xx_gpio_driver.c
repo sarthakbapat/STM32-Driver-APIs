@@ -193,7 +193,10 @@ void GPIO_Pclk_control(GPIO_RegDef *pGPIO, uint8_t EnorDi)
 
 uint8_t GPIO_ReadFromPin(GPIO_RegDef *pGPIO,uint8_t PinNumber)
 {
-
+	uint8_t value;
+	value = (uint8_t)((pGPIO->IDR >> PinNumber)& (0x00000001));				//Right shift by pin number to get the bit to the
+	return value;																											//1st position and mask all other bits to 0.
+	
 }
 
 
@@ -213,7 +216,7 @@ uint8_t GPIO_ReadFromPin(GPIO_RegDef *pGPIO,uint8_t PinNumber)
 
 void GPIO_WriteToPin(GPIO_RegDef *pGPIO,uint8_t PinNumber, uint8_t value)
 {
-
+	pGPIO->ODR |= (value << PinNumber);
 }
 
 /************************************************************
@@ -232,7 +235,9 @@ void GPIO_WriteToPin(GPIO_RegDef *pGPIO,uint8_t PinNumber, uint8_t value)
 
 uint16_t GPIO_ReadFromPort(GPIO_RegDef *pGPIO)
 {
-
+	uint16_t value;
+	value = (uint16_t)(pGPIO->IDR);	
+	return value;
 }
 
 /************************************************************
@@ -251,7 +256,7 @@ uint16_t GPIO_ReadFromPort(GPIO_RegDef *pGPIO)
 
 void GPIO_WriteToPort(GPIO_RegDef *pGPIO, uint16_t value)
 {
-
+	pGPIO->ODR = value;
 }
 
 /************************************************************
@@ -270,7 +275,7 @@ void GPIO_WriteToPort(GPIO_RegDef *pGPIO, uint16_t value)
 
 void GPIO_TogglePin(GPIO_RegDef *pGPIO,uint8_t PinNumber)
 {
-
+	pGPIO->ODR ^= (1 << PinNumber);
 }
 
 /****************************Data read and write to pin or port end**************************/
